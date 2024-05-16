@@ -79,7 +79,6 @@ from eodag.rest.types.queryables import QueryablesGetParams
 from eodag.rest.types.stac_search import SearchPostRequest, sortby2list
 from eodag.rest.utils import format_pydantic_error, str2json, str2list
 from eodag.utils import parse_header, update_nested_dict
-from eodag.utils.instrumentation.eodag import EODAGInstrumentor
 
 if TYPE_CHECKING:
     from fastapi.types import DecoratedCallable
@@ -667,6 +666,9 @@ def telemetry_init(fastapi_app: Optional[FastAPI] = None) -> None:
             meter_provider=meter_provider,
         )
     logger.debug("Instrument EODAG app")
+
+    from eodag.utils.instrumentation.eodag import EODAGInstrumentor
+
     EODAGInstrumentor(eodag_api).instrument(
         tracer_provider=tracer_provider,
         meter_provider=meter_provider,
